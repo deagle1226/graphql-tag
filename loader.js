@@ -23,6 +23,13 @@ function expandImports(source, doc) {
         }
       )
     }
+    function sort(defs) {
+      return defs.sort(function(a, b) {
+        if (a.kind < b.kind) return 1;
+        if (a.kind > b.kind || a.name.value > b.name.value) return -1;
+        return 1;
+      });
+    }
   `;
 
   lines.some((line) => {
@@ -35,7 +42,7 @@ function expandImports(source, doc) {
     return (line.length !== 0 && line[0] !== '#');
   });
 
-  return outputCode;
+  return outputCode += '\n' + 'doc.definitions = sort(doc.definitions)';
 }
 
 module.exports = function(source) {
